@@ -22,7 +22,7 @@ class App extends React.Component {
   }
   render(){
     //debugger;
-    return !this.state.isLogin ? <Converter username = {this.username}/> : <Login changeState = {this.changeState} />;
+    return this.state.isLogin ? <Converter username = {this.username}/> : <Login changeState = {this.changeState} />;
   }
 
 }

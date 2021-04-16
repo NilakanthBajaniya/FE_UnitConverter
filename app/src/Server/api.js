@@ -1,74 +1,58 @@
-var URL = "http://localhost:3001";
-if (process.env.NODE_ENV === 'production') {
-    URL = 'Prod_URL'
-}
 
+export function LogIn(username, password) {
 
-// Fetch URL dynamically
-export function getDataWithURL(url, data) {
-    const requestOptions = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    };
-
-    return new Promise((resolve, reject) => {
-        fetch(url, requestOptions)
-            .then((response) => response.json())
-            .then((data) => resolve(data))
-            .catch(e => { resolve(e); console.log(e); });
-
-    });
-}
-
-export async function LogIn(username, password) {
-
-    var data = await postDataWithURL(URL + "/users/", {
-        "username": username,
-        "password": password
-    });
-
-    return data;
-}
-
-export async function Convert(convType, unit) {
-
-    let data = await postDataWithURL(URL + "/convert/", { "convType": convType, "unit": unit });
-    return data;
-}
-
-export function postDataWithURL(url, data) {
-
-    const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    };
-
-    return new Promise((resolve, reject) => {
-        fetch(url, requestOptions)
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch(e => { resolve(e); console.log(e); });
-    });
-}
-
-export function checkDataNotNull(data) {
-    return "" ? data === null || data === undefined || data === "" : data;
-}
-
-export function LogInCheck() {
-    var userInfo = JSON.parse(localStorage.getItem('User'));
-
-    if (userInfo !== undefined && userInfo !== null && new Date(userInfo.expiry) > new Date()) {
+    if (username != undefined && username != '' && username != " " && password != undefined && password != '' && password != " ")
         return true;
+
+
+    return false;
+}
+
+export function Convert(convType, unit) {
+
+    debugger;
+
+    let res = { status: false, err: "", convertedUnit: null }
+
+    if ((convType == undefined || convType == "" || convType == " ")) {
+        
+        res.err = "Select Conversion Type!"
+        return res;
+    }
+
+    if ((unit == undefined || unit == "" || unit == " ")) {
+       
+        res.err = "Unit can not be empty";
+        return res;
+    }
+
+    if (isNaN(unit)) {
+        
+        res.err = "Unit must be a Number.";
+        return res;
+    }
+
+    if (convType == 1) // convert from feet to meter
+    {
+        const feets = parseFloat(unit);
+        const feetsInMeters = (feets * 0.3048).toFixed(2);
+
+        res.status = true;
+        res.convertedUnit = feetsInMeters;
+        return res;
+    }
+    else if (convType == 2) // convert from meter to feet
+    {
+        let meters = parseFloat(unit)
+        const metersInFeets = (meters * 3.28084).toFixed(2);
+
+        res.status = true;
+        res.convertedUnit = metersInFeets;
+        return res;
     }
     else {
-        return false;
+
+        res.err = "Please select valid conversion type";
+        return res;
     }
 }
-
-
-
-
-

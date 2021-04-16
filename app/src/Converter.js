@@ -33,9 +33,9 @@ function Converter(props) {
         outputUnitName === "Meters" ? setOutputUnitName("Feets") : setOutputUnitName("Meters");
         convType === 1 ? setConvType(2) : setConvType(1);
 
-        setInputUnit(1);
+        //setInputUnit(1);
 
-        setResultDisplay("none");
+        //setResultDisplay("none");
     };
 
 
@@ -47,15 +47,28 @@ function Converter(props) {
     const [outputUnit, setOutputUnit] = useState();
     const [resultDisplay, setResultDisplay] = useState("none");
 
-    const GetConversion = async (convType, inputUnit) => {
-        let res = await Convert(convType, parseFloat(inputUnit));
+    function onChangeUpdateInputUnit(event) {
 
-        if (res.statusCode === 200) {
+        if (event.target.value == "" || event.target.value == undefined) {
+
+            setResultDisplay("none");
+            return;
+        }
+
+        setInputUnit(event.target.value);
+        GetConversion(convType, inputUnit)
+
+    }
+
+    const GetConversion = (convType, inputUnit) => {
+
+        let res = Convert(convType, parseFloat(inputUnit != undefined ? inputUnit : 1));
+        if (res.status) {
             setOutputUnit(res.convertedUnit);
             setResultDisplay("block");
         }
         else
-            alert("Some error occoured!");
+            setResultDisplay("none");
     }
     return (
 
@@ -80,8 +93,8 @@ function Converter(props) {
                         textColor="primary"
                         centered
                     >
-                        <Tab label="Convert to Feets" />
-                        <Tab label="Convert to Meters" />
+                        <Tab label="Meters to Feet" />
+                        <Tab label="Feet to Meters" />
                     </Tabs>
                 </Paper>
             </Grid>
@@ -93,21 +106,24 @@ function Converter(props) {
                 <Typography component="div">
                     <Grid>
                         <Grid>
-                            <TextField size="small" onChange={event => {setInputUnit(event.target.value); setResultDisplay("none");}}
+                            <TextField size="small"
+                                onChange={event => onChangeUpdateInputUnit(event)}
+                                // onChange={e => GetConversion(convType, inputUnit)}
                                 id="unit" label={inputUnitName}
-                                type="number"
+                                type="text"
                                 variant="outlined"
+                                //InputProps={{ inputProps: { min: 1 } }}
                                 value={inputUnit} />
-                               
+
                                &nbsp; &nbsp;
 
-                            <Button onClick={event => GetConversion(convType, inputUnit)}
+                            {/* <Button onClick={event => GetConversion(convType, inputUnit)}
                                 variant="contained"
                                 size="large"
                                 color="primary">
 
                                 Convert to {outputUnitName}
-                            </Button>
+                            </Button> */}
                         </Grid>
 
                         <Grid>
@@ -117,8 +133,6 @@ function Converter(props) {
 
                 </Typography>
             </Grid>
-
-
         </Grid>
     );
 }
