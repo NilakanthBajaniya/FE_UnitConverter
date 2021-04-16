@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import {  useHistory } from 'react-router';
 import { LogIn } from './Server/api';
+import Box from '@material-ui/core/Box';
 
 
-export default function Login() {
+
+export default function Login(props) {
     const [userName, setUserName] = useState();
     const [passWord, setPassWord] = useState();
-    const [message, setMessage] = useState("Please log in");
-    const history=useHistory();
 
     const checkLogin = async () => {
 
-        const isLoggedIn = await LogIn(userName, passWord);
-        debugger;
-        if (isLoggedIn.status == 200) {
-            history.push("/tab");
+        const res = await LogIn(userName, passWord);
+        
+        if (res['statusCode'] === 200) {
+                props.changeState(userName);
         }
         else{
 
@@ -23,26 +22,28 @@ export default function Login() {
     }
 
     return (
-        <div className="login-wrapper">
-            <h1>{message}</h1>
-            <div>
-                <label>
-                    <p>Username</p>
-                    <input type="text" onChange={e => setUserName(e.target.value)} />
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input type="password" onChange={e => setPassWord(e.target.value)} />
-                </label>
+        
+        <Box color="text.primary">
+        
+            <div className="login-wrapper">
+                <h1>Login</h1>
                 <div>
-                    <button onClick={e => checkLogin()}>Submit</button>
+                    <label>
+                        <p>Username</p>
+                        <input type="text" onChange={e => setUserName(e.target.value)} />
+                    </label>
+                    <label>
+                        <p>Password</p>
+                        <input type="password" onChange={e => setPassWord(e.target.value)} />
+                    </label>
+                    <div>
+                        <button onClick={e => checkLogin()}>Submit</button>
+                    </div>
                 </div>
+
             </div>
+        </Box>
 
-        </div>
+        
     )
-}
-
-function login(username, password) {
-
 }

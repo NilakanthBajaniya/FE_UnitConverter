@@ -5,11 +5,13 @@ if (process.env.NODE_ENV === 'production') {
 
 
 // Fetch URL dynamically
-export function getDataWithURL(url) {
+export function getDataWithURL(url, data) {
     const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
     };
+
     return new Promise((resolve, reject) => {
         fetch(url, requestOptions)
             .then((response) => response.json())
@@ -29,7 +31,11 @@ export async function LogIn(username, password) {
     return data;
 }
 
+export async function Convert(convType, unit) {
 
+    let data = await postDataWithURL(URL + "/convert/", { "convType": convType, "unit": unit });
+    return data;
+}
 
 export function postDataWithURL(url, data) {
 
@@ -41,20 +47,15 @@ export function postDataWithURL(url, data) {
 
     return new Promise((resolve, reject) => {
         fetch(url, requestOptions)
-            .then((response) => resolve(response))
-            .catch(e => reject(e));
-            //.then((response) => {debugger;resolve({status:response.status,response:response})})
-
+        .then((response) => response.json())
+        .then((data) => resolve(data))
+        .catch(e => { resolve(e); console.log(e); });
     });
 }
-
-
 
 export function checkDataNotNull(data) {
     return "" ? data === null || data === undefined || data === "" : data;
 }
-
-
 
 export function LogInCheck() {
     var userInfo = JSON.parse(localStorage.getItem('User'));
