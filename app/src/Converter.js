@@ -13,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import { TextField, Button } from '@material-ui/core';
 import './Tab.scss';
 
+
 const useStyles = makeStyles({
     root: {
 
@@ -21,120 +22,107 @@ const useStyles = makeStyles({
     },
 });
 
-function Converter(props) {
+class Converter extends React.Component {
 
-    const [value, setValue] = React.useState(0);
-    const classes = useStyles();
+    constructor(props) {
+        super(props);
+        this.state = { inputUnitName: "Meters", convType: 2, outputUnitName: "Feets", inputUnit: "", outputUnit: "", resultDisplay: "none", value: 0 };
+    }
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
 
-        inputUnitName === "Meters" ? setInputUnitName("Feets") : setInputUnitName("Meters");
-        outputUnitName === "Meters" ? setOutputUnitName("Feets") : setOutputUnitName("Meters");
-        convType === 1 ? setConvType(2) : setConvType(1);
+    handleChange = (event, newValue) => {
 
-        //setInputUnit(1);
+        var newState = this.state;
+        newState = {
+            "value": newValue,
+            "inputUnitName": this.state.inputUnitName === "Meters" ? "Feets" : "Meters",
+            "outputUnitName": this.state.outputUnitName === "Meters" ? "Feets" : "Meters",
+            "convType": this.state.convType === 1 ? 2 : 1,
+            "inputUnit": this.state.outputUnit,
+            "outputUnit": this.state.inputUnit
+        };
 
-        //setResultDisplay("none");
+        this.setState(newState, () => {
+            console.log(this.state);
+        });
     };
 
-
-    const [inputUnitName, setInputUnitName] = useState("Meters");
-    const [convType, setConvType] = useState(2);
-    const [outputUnitName, setOutputUnitName] = useState("Feets");
-
-    const [inputUnit, setInputUnit] = useState();
-    const [outputUnit, setOutputUnit] = useState();
-    const [resultDisplay, setResultDisplay] = useState("none");
-
-    function onChangeUpdateInputUnit(event) {
-
-        if (event.target.value == "" || event.target.value == undefined) {
-
-            setResultDisplay("none");
-            return;
-        }
-
-        setInputUnit(event.target.value);
-        GetConversion(convType, inputUnit)
-
+    onChangeUpdateInputUnit(event) {
+        
+                const finalData = this.GetConversion(event.target.value);
+        this.setState({ "outputUnit": finalData[1], resultDisplay: "block", inputUnit: finalData[0] }, (e) => { console.log("state changed") });
+        
     }
 
-    const GetConversion = (convType, inputUnit) => {
+    GetConversion(inputUnit) {
 
-        let res = Convert(convType, parseFloat(inputUnit != undefined ? inputUnit : 1));
+        let res = Convert(this.state.convType, parseFloat(inputUnit != undefined ? inputUnit : 1));
         if (res.status) {
-            setOutputUnit(res.convertedUnit);
-            setResultDisplay("block");
+
+            return [inputUnit, res.convertedUnit];
         }
-        else
-            setResultDisplay("none");
+        return ["", 0];
+
     }
-    return (
 
-        <Grid align="center">
-            <CssBaseline />
+    render() {
+        return (
 
-            <Grid className="welcome" justify="center">
-                {/* <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '10vh' }}> */}
-                <Typography component="div">
+            <Grid align="center">
+                <CssBaseline />
 
-                    Welcome {props.username}!
+                <Grid className="welcome" justify="center">
+                    {/* <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '10vh' }}> */}
+                    <Typography component="div">
+                        Welcome {this.props.username}!
+                    </Typography>
+                </Grid>
 
-                </Typography>
-            </Grid>
-
-            <Grid className="tab-grid" justify="center">
-                <Paper className={classes.root}>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        centered
-                    >
-                        <Tab label="Meters to Feet" />
-                        <Tab label="Feet to Meters" />
-                    </Tabs>
-                </Paper>
-            </Grid>
+                <Grid className="tab-grid" justify="center">
+                    <Paper>
+                        <Tabs
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            centered
+                        >
+                            <Tab label="Meters to Feet" />
+                            <Tab label="Feet to Meters" />
+                        </Tabs>
+                    </Paper>
+                </Grid>
 
 
-            <Grid className="unit-grid" justify="center">
+                <Grid className="unit-grid" justify="center">
 
-                {/* <Typography component="div" style={{ alignItems: 'center', backgroundColor: '#cfe8fc', height: '50vh' }}> */}
-                <Typography component="div">
-                    <Grid>
+                    {/* <Typography component="div" style={{ alignItems: 'center', backgroundColor: '#cfe8fc', height: '50vh' }}> */}
+                    <Typography component="div">
                         <Grid>
-                            <TextField size="small"
-                                onChange={event => onChangeUpdateInputUnit(event)}
-                                // onChange={e => GetConversion(convType, inputUnit)}
-                                id="unit" label={inputUnitName}
-                                type="text"
-                                variant="outlined"
-                                //InputProps={{ inputProps: { min: 1 } }}
-                                value={inputUnit} />
+                            <Grid>
+                                <TextField size="small"
+                                    onChange={event => this.onChangeUpdateInputUnit(event)}
+                                    // onChange={e => GetConversion(convType, inputUnit)}
+                                    id="unit" label={this.state.inputUnitName}
+                                    type="text"
+                                    variant="outlined"
+                                    //InputProps={{ inputProps: { min: 1 } }}
+                                    value={this.state.inputUnit} />
 
-                               &nbsp; &nbsp;
+                    
+                            </Grid>
 
-                            {/* <Button onClick={event => GetConversion(convType, inputUnit)}
-                                variant="contained"
-                                size="large"
-                                color="primary">
-
-                                Convert to {outputUnitName}
-                            </Button> */}
+                            <Grid>
+                                <span style={{ display: this.state.resultDisplay }}>{this.state.inputUnit == "" ? 0 : this.state.inputUnit} {this.state.inputUnitName} = {this.state.outputUnit} {this.state.outputUnitName}</span>
+                            </Grid>
                         </Grid>
 
-                        <Grid>
-                            <span style={{ display: resultDisplay }}>{inputUnit} {inputUnitName} = {outputUnit} {outputUnitName}</span>
-                        </Grid>
-                    </Grid>
-
-                </Typography>
+                    </Typography>
+                </Grid>
             </Grid>
-        </Grid>
-    );
+        );
+    }
 }
+
 
 export default Converter;

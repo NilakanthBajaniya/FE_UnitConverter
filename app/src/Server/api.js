@@ -10,7 +10,7 @@ export function LogIn(username, password) {
 
 export function Convert(convType, unit) {
 
-    debugger;
+    //debugger;
 
     let res = { status: false, err: "", convertedUnit: null }
 
