@@ -1,9 +1,8 @@
 
 export function LogIn(username, password) {
 
-    if (username != undefined && username != '' && username != " " && password != undefined && password != '' && password != " ")
+    if (username !== undefined && username !== '' && username !== " " && password !== undefined && password !== '' && password !== " ")
         return true;
-
 
     return false;
 }
@@ -12,13 +11,13 @@ export function Convert(convType, unit) {
 
     let res = { status: false, err: "", convertedUnit: null }
 
-    if ((convType == undefined || convType == "" || convType == " ")) {
+    if ((convType === undefined || convType === "" || convType === " ")) {
         
         res.err = "Select Conversion Type!"
         return res;
     }
 
-    if ((unit == undefined || unit == "" || unit == " ")) {
+    if ((unit === undefined || unit === "" || unit === " ")) {
        
         res.err = "Unit can not be empty";
         return res;
@@ -30,7 +29,7 @@ export function Convert(convType, unit) {
         return res;
     }
 
-    if (convType == 1) // convert from feet to meter
+    if (convType === 1) // convert from feet to meter
     {
         const feets = parseFloat(unit);
         const feetsInMeters = (feets * 0.3048).toFixed(2);
@@ -39,7 +38,7 @@ export function Convert(convType, unit) {
         res.convertedUnit = feetsInMeters;
         return res;
     }
-    else if (convType == 2) // convert from meter to feet
+    else if (convType === 2) // convert from meter to feet
     {
         let meters = parseFloat(unit)
         const metersInFeets = (meters * 3.28084).toFixed(2);

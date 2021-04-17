@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Convert } from './Server/api';
-
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -10,17 +8,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
-import { TextField, Button } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import './Tab.scss';
-
-
-const useStyles = makeStyles({
-    root: {
-
-        flexGrow: 1,
-
-    },
-});
 
 class Converter extends React.Component {
 
@@ -28,7 +17,6 @@ class Converter extends React.Component {
         super(props);
         this.state = { inputUnitName: "Meters", convType: 2, outputUnitName: "Feets", inputUnit: "", outputUnit: "", resultDisplay: "none", value: 0 };
     }
-
 
     handleChange = (event, newValue) => {
 
@@ -57,7 +45,7 @@ class Converter extends React.Component {
     //api call to get conversion
     GetConversion(inputUnit) {
 
-        let res = Convert(this.state.convType, parseFloat(inputUnit != undefined ? inputUnit : 1));
+        let res = Convert(this.state.convType, parseFloat(inputUnit !== undefined ? inputUnit : 1));
         if (res.status) {
 
             return [inputUnit, res.convertedUnit];
@@ -114,7 +102,7 @@ class Converter extends React.Component {
                             </Grid>
 
                             <Grid>
-                                <span style={{ display: this.state.resultDisplay }}>{this.state.inputUnit == "" ? 0 : this.state.inputUnit} {this.state.inputUnitName} = {this.state.outputUnit} {this.state.outputUnitName}</span>
+                                <span style={{ display: this.state.resultDisplay }}>{this.state.inputUnit === "" ? 0 : this.state.inputUnit} {this.state.inputUnitName} = {this.state.outputUnit} {this.state.outputUnitName}</span>
                             </Grid>
                         </Grid>
 
