@@ -34,6 +34,7 @@ class Converter extends React.Component {
 
         var newState = this.state;
         newState = {
+            
             "value": newValue,
             "inputUnitName": this.state.inputUnitName === "Meters" ? "Feets" : "Meters",
             "outputUnitName": this.state.outputUnitName === "Meters" ? "Feets" : "Meters",
@@ -42,18 +43,18 @@ class Converter extends React.Component {
             "outputUnit": this.state.inputUnit
         };
 
-        this.setState(newState, () => {
-            console.log(this.state);
-        });
+        this.setState(newState);
     };
 
+    //gets the conversions and update the state to upates on front end
     onChangeUpdateInputUnit(event) {
         
-                const finalData = this.GetConversion(event.target.value);
+        const finalData = this.GetConversion(event.target.value);
         this.setState({ "outputUnit": finalData[1], resultDisplay: "block", inputUnit: finalData[0] }, (e) => { console.log("state changed") });
         
     }
 
+    //api call to get conversion
     GetConversion(inputUnit) {
 
         let res = Convert(this.state.convType, parseFloat(inputUnit != undefined ? inputUnit : 1));
@@ -61,8 +62,8 @@ class Converter extends React.Component {
 
             return [inputUnit, res.convertedUnit];
         }
-        return ["", 0];
 
+        return ["", 0];
     }
 
     render() {
@@ -123,6 +124,5 @@ class Converter extends React.Component {
         );
     }
 }
-
 
 export default Converter;

@@ -17,21 +17,9 @@ import Container from '@material-ui/core/Container';
 
 export default function Login(props) {
 
-    function Copyright() {
-        return (
-            <Typography variant="body2" color="textSecondary" align="center">
-                {'Copyright © '}
-                <Link color="inherit" href="https://material-ui.com/">
-                    Your Website
-          </Link>{' '}
-                {new Date().getFullYear()}
-                {'.'}
-            </Typography>
-        );
-    }
-
     const useStyles = makeStyles((theme) => ({
         paper: {
+            
             marginTop: theme.spacing(8),
             display: 'flex',
             flexDirection: 'column',
@@ -53,9 +41,10 @@ export default function Login(props) {
     const [userName, setUserName] = useState();
     const [passWord, setPassWord] = useState();
 
-    const checkLogin =  () => {
+    //validation of username and password
+    const checkLogin = () => {
 
-        const res =  LogIn(userName, passWord);
+        const res = LogIn(userName, passWord);
 
         if (res === true) {
             props.changeState(userName);

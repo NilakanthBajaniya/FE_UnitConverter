@@ -10,8 +10,6 @@ export function LogIn(username, password) {
 
 export function Convert(convType, unit) {
 
-    //debugger;
-
     let res = { status: false, err: "", convertedUnit: null }
 
     if ((convType == undefined || convType == "" || convType == " ")) {
