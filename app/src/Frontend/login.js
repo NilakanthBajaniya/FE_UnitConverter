@@ -1,5 +1,5 @@
 
-import { LogIn } from './Server/api';
+import { LogIn } from '../Server/api';
 import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
